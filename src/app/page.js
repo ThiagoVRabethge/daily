@@ -1,95 +1,68 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+'use client';
+
+import 'bootstrap/dist/css/bootstrap.css';
+import Link from 'next/link';
+import { useState } from 'react';
+import server from '@/services/server';
 
 export default function Home() {
+  const [username, setUsername] = useState();
+
+  const [password, setPassword] = useState();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    server
+      .post('/login', {username: username, password: password})
+      .then((response) => console.log(response))
+      .catch((error) => console.error(error))
+  }
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <div className="container">
+      <div className="mb-3 mt-4 text-center">
+        <h3>Entrar</h3>
+      </div>
+
+      <form onSubmit={(e) => handleLogin(e)}>
+        <div className="form-group mb-3 mt-3">
+          <label htmlFor="username" className="mb-2">Usuário</label>
+          <input 
+            name="username" 
+            type="text" 
+            className="form-control"
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Doe John" 
+          />
         </div>
-      </div>
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+        <div className="form-group mb-3">
+          <label htmlFor="password" className="mb-2">Senha</label>
+          <input 
+            name="password" 
+            type="password" 
+            className="form-control"
+            onChange={(e) => setPassword(e.target.value)} 
+          />
 
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
+          <div className="mt-2">
+            <Link href="/">
+              Ainda não possui uma conta?
+            </Link>
+          </div>
+        </div>
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
+        <div className="form-group">
+          <button type="submit" className="btn btn-sm btn-success">
+            Entrar
+          </button>
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  );
+          <button type="reset" className="btn btn-sm btn-danger ms-2">
+            Limpar
+          </button>
+        </div>
+      </form>
+    </div>
+  )
 }
